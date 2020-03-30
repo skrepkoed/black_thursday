@@ -1,7 +1,7 @@
 require 'date'
 require_relative 'merchant.rb'
 require 'pry'
-
+require_relative 'sales_engine'
 require_relative 'basic_functions'
 
 class MerchantsRepository
@@ -17,7 +17,7 @@ def initialize(path)
 
 	self.last_id_set(@all)
 
-	@total_merchants=total
+	@total_entities=total
 end
 
 

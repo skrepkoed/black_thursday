@@ -1,5 +1,6 @@
 require_relative 'basic_functions'
 require_relative 'item'
+require_relative 'sales_engine'
 require 'pry'
 require 'bigdecimal'
 class ItemsRepository
@@ -13,7 +14,7 @@ def initialize(path)
 
 	self.last_id_set(@all)
 
-	@total_merchants=total
+	@total_entities=total
 end
 
 def find_all_with_description(description)
@@ -44,6 +45,8 @@ end
 
 def find_all_by_merchant_id(merchant_id)
 	result=@all.find_all { |item| item.merchant_id==merchant_id  }
+	
+	#SalesEngine.merchants_repository.find_by_id(merchant_id).total=result.count
 
 	result
 end

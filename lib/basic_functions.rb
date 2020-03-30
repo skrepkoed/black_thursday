@@ -1,7 +1,7 @@
-
+require 'sales_engine'
 
 module BasicFunctions
-attr_accessor :all, :total_merchants
+attr_accessor :all, :total_entities
 
 def all
 	@all
@@ -43,9 +43,38 @@ end
 
 def create(attributes)
 	attributes[:id]=last_id_get+1
-	@all<<@included_class.new(attributes)
+	flag={foreign_key:false,primary_key:false}
+	entity_name=''
+	attributes.each do |k,v|
 
-	#binding.pry
+		if k.to_s.match?(/_id\z/)
+			flag[:foreign_key]=true
+			entity_name=k.to_s.chomp '_id'
+
+			entity_name+='s_repository'
+
+			entity_name=entity_name.to_sym
+			
+			primary_key=SalesEngine.send(entity_name).find_by_id(v)
+				 	
+			flag[:primary_key]=primary_key.id
+
+				
+		end
+		
+	end
+	if flag[:primary_key]&&flag[:foreign_key]
+		SalesEngine.send(entity_name).find_by_id(flag[:primary_key]).total_entities+=1
+		
+		new_entity=@included_class.new(attributes)
+			
+		@all<<new_entity
+	end
+
+	if flag[:foreign_key]==false
+		@all<<@included_class.new(attributes)	
+	end
+	
 end
 
 def update(id, attributes)
@@ -55,7 +84,7 @@ def update(id, attributes)
 		attributes[:updated_at]=Time.now
 			attributes.each do |k,v|
 
-				unless k==:id||k==:created_at||k.match?(/_id\z/)
+				unless k==:id||k==:created_at||k.match?(/_id\z/)||k==:total
 
 				sym_method=(k.to_s + '=').to_sym
 

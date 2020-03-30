@@ -1,5 +1,5 @@
 require 'pry'
-
+require_relative 'statistic_functions'
 class SalesAnalyst
 attr_accessor :merchants_repository, :items_repository
 
