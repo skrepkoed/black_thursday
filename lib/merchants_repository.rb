@@ -8,13 +8,16 @@ class MerchantsRepository
 
 include BasicFunctions
 
-attr_accessor :all 
+
 
 def initialize(path)
 	@all= Merchant.list(path)
+	
 	@included_class=Merchant
 
 	self.last_id_set(@all)
+
+	@total_merchants=total
 end
 
 

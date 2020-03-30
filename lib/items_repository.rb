@@ -5,13 +5,15 @@ require 'bigdecimal'
 class ItemsRepository
 
 include BasicFunctions
-attr_accessor :all 
+
 
 def initialize(path)
 	@all= Item.list(path)
 	@included_class=Item 
 
 	self.last_id_set(@all)
+
+	@total_merchants=total
 end
 
 def find_all_with_description(description)

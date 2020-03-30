@@ -1,11 +1,17 @@
 
 
 module BasicFunctions
+attr_accessor :all, :total_merchants
 
 def all
 	@all
 end
 
+def total
+	
+	@all.count
+
+end 
 
 def find_by_id(id)
 
