@@ -17,10 +17,15 @@ def self.from_csv(paths)
 	return self
 end
 
+
+
 def self.merchants
 
 	@merchants_repository||=MerchantsRepository.new(@merchants_path)
 	
+	@merchants_repository.initialize_objects_from_csv
+
+	return @merchants_repository
 	#binding.pry
 
 end
@@ -28,6 +33,11 @@ end
 def self.items
 	
 	@items_repository||=ItemsRepository.new(@items_path)
+
+	@items_repository.initialize_objects_from_csv
+#binding.pry
+
+	return @items_repository
 
 end
 

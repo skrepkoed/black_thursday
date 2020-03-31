@@ -11,15 +11,26 @@ include BasicFunctions
 
 
 def initialize(path)
-	@all= Merchant.list(path)
 	
+	@path=path
+	@all=[]
 	@included_class=Merchant
 
-	self.last_id_set(@all)
+	#self.last_id_set(@all)
 
-	@total_entities=total
+	#@total_entities=total
 end
 
+def initialize_objects_from_csv
+	if all.empty?
+			
+		Merchant.list(@path)
 
+		self.last_id_set(@all)
+
+		@total_entities=total
+
+	end
+end
 
 end

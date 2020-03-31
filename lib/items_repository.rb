@@ -9,13 +9,27 @@ include BasicFunctions
 
 
 def initialize(path)
-	@all= Item.list(path)
+	@path=path
+
+	@all=[]
 	@included_class=Item 
 
-	self.last_id_set(@all)
-
-	@total_entities=total
 end
+
+def initialize_objects_from_csv
+	
+	if @all.empty?	
+
+		Item.list(@path)
+		
+		self.last_id_set(@all)
+
+		@total_entities=total
+
+	end
+end
+
+
 
 def find_all_with_description(description)
 	
@@ -43,11 +57,15 @@ def find_all_by_price_in_range(range)
 	result
 end
 
-def find_all_by_merchant_id(merchant_id)
-	result=@all.find_all { |item| item.merchant_id==merchant_id  }
-	
-	#SalesEngine.merchants_repository.find_by_id(merchant_id).total=result.count
+def find_all_by_merchant_id(merchant_id, attribute:nil)
 
+	if attribute 
+	result=@all.find_all{ |item| item.merchant_id==merchant_id}.map{ |item| item.send(attribute)}
+	else
+	result=@all.find_all { |item| item.merchant_id==merchant_id  }	
+	end
+	
+	
 	result
 end
 

@@ -1,7 +1,7 @@
 require 'sales_engine'
 
 module BasicFunctions
-attr_accessor :all, :total_entities
+attr_accessor :all, :total_entities, :path
 
 def all
 	@all
@@ -42,7 +42,9 @@ def find_all_by_name(fragment)
 end
 
 def create(attributes)
-	attributes[:id]=last_id_get+1
+	if attributes[:id]==nil
+		attributes[:id]=last_id_get+1
+	end	
 	flag={foreign_key:false,primary_key:false}
 	entity_name=''
 	attributes.each do |k,v|
@@ -54,9 +56,9 @@ def create(attributes)
 			entity_name+='s_repository'
 
 			entity_name=entity_name.to_sym
-			
-			primary_key=SalesEngine.send(entity_name).find_by_id(v)
-				 	
+			#binding.pry
+			primary_key=SalesEngine.send(entity_name).find_by_id(v.to_i)
+				#binding.pry 	
 			flag[:primary_key]=primary_key.id
 
 				

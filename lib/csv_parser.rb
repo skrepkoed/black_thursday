@@ -1,5 +1,5 @@
 require 'csv'
-
+require_relative 'sales_engine'
 module CsvParser
 
 	def self.included(base)
@@ -11,14 +11,15 @@ module CsvParser
 	module ClassMethods
 
 		def list(path)
-			list=[]
+			
 			klass=->{self}
 			converter=->(x){x.to_sym}
 			CSV.read(path, headers:true, header_converters: converter).each do |item|
-
-				list<<klass.call.new(item.to_h)
+					#binding.pry
+				SalesEngine.send(klass.call.repository).create(item.to_h)
+				#binding.pry
 			end
-			return list
+			
 		end
 
 	end

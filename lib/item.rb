@@ -1,7 +1,15 @@
 require 'bigdecimal/util'
 require 'time'
-class Item
 require 'pry'
+class Item
+
+class<<self 
+
+	def repository
+		:items_repository
+	end
+	end
+
 include CsvParser
 
 attr_accessor  :id, :name, :description, :unit_price, :merchant_id, :created_at, :updated_at
