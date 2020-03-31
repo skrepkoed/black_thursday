@@ -3,8 +3,16 @@ require 'sales_engine'
 module BasicFunctions
 attr_accessor :all, :total_entities, :path
 
-def all
-	@all
+def all( attribute:nil)
+	if attribute
+
+		@all.map { |entity| entity.send(attribute)  }
+
+	else
+		@all
+	end
+
+	
 end
 
 def total
