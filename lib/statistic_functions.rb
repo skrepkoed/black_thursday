@@ -20,9 +20,14 @@ def standard_deviation(set_of_values:)
 
 	result=(sum_of_squares/(set_of_values.count-1).to_f)**0.5
 
-	result.round(2)
+	{result: result.round(2), average:average}
 
 	
+end
+
+def standard_deviation_evaluation
+
+
 end
 
 end

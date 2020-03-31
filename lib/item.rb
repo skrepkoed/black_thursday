@@ -24,8 +24,9 @@ def initialize(id:,name:,description:,unit_price:,merchant_id:,created_at:Time.n
 	unless created_at.instance_of? (Time) || updated_at.instance_of?(Time)
 	@created_at= Time.parse(created_at)
 	@updated_at = Time.parse(updated_at)	
-	#binding.pry
+	
 else
+	
 	@created_at=created_at
 	@updated_at=updated_at
 	end

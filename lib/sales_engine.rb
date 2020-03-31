@@ -17,9 +17,11 @@ def self.from_csv(paths)
 
 	@items_path=paths[:items]
 
+	@customers_path=paths[:customers]
+
 	@invoices_path=paths[:invoices]
 
-	@customers_path=paths[:customers]
+	
 	return self
 end
 
@@ -58,7 +60,7 @@ def self.invoices
 
 end
 
-def self.invoices
+def self.customers
 	
 	@customers_repository||=CustomersRepository.new(@customers_path)
 
@@ -72,9 +74,10 @@ end
 def self.analyst 
 merchants
 items
-merchants,items=merchants_repository,items_repository
+invoices
+merchants,items,invoices=merchants_repository,items_repository,invoices_repository
 #binding.pry
-SalesAnalyst.new(merchants,items)
+SalesAnalyst.new(merchants,items,invoices)
 
 end
 

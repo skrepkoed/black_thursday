@@ -21,7 +21,7 @@ def initialize(id:, first_name:, last_name:, created_at:Time.now,updated_at:Time
 	@created_at=created_at 
 	@updated_at = updated_at
 
-	@total_entities=0
+	@total_entities=Hash.new(0)
 
 
 

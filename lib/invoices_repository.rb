@@ -32,4 +32,22 @@ def initialize_objects_from_csv
 	end
 end
 
+def find_all_by_customer_id(id)
+
+	@all.select{|invoice| invoice.customer_id==id}
+	
+end
+
+def find_all_by_merchant_id(id)
+
+	@all.select{|invoice| invoice.merchant_id==id}
+	
+end
+
+def find_all_by_status(status)
+
+	@all.select{|invoice| invoice.status==status}
+	
+end
+
 end

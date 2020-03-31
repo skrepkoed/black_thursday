@@ -14,6 +14,11 @@ def all( attribute:nil)
 
 	
 end
+def all_total_entities(entity)
+	
+	@all.map { |e| e.total_entities[entity]  }
+
+end
 
 def total
 	
@@ -55,27 +60,45 @@ def create(attributes)
 	end	
 	flag={foreign_key:false,primary_key:false}
 	entity_name=''
+	container={}
+	primary_key_presence=[]
 	attributes.each do |k,v|
 
 		if k.to_s.match?(/_id\z/)
 			flag[:foreign_key]=true
+			
 			entity_name=k.to_s.chomp '_id'
 
-			entity_name+='s_repository'
+			entity_name+='s'
 
 			entity_name=entity_name.to_sym
 			#binding.pry
-			primary_key=SalesEngine.send(entity_name).find_by_id(v.to_i)
-				#binding.pry 	
-			flag[:primary_key]=primary_key.id
 
-				
+			primary_key=SalesEngine.send(entity_name).find_by_id(v.to_i)
+				#binding.pry 
+				if primary_key	
+					primary_key_presence<<true
+					container[entity_name]=primary_key.id
+					#flag[:primary_key]
+				else
+						primary_key_presence<<false
+					
+				end
+
 		end
 		
 	end
+	unless primary_key_presence.include?(false)
+		flag[:primary_key]=true
+	end
+	
 	if flag[:primary_key]&&flag[:foreign_key]
-		SalesEngine.send(entity_name).find_by_id(flag[:primary_key]).total_entities+=1
+		owned_entity=(@included_class.to_s.downcase+'s').to_sym
 		
+		container.each do |entity_name,i|
+
+		SalesEngine.send(entity_name).find_by_id(i).total_entities[owned_entity]+=1
+		end
 		new_entity=@included_class.new(attributes)
 			
 		@all<<new_entity
