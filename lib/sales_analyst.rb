@@ -2,12 +2,12 @@ require 'pry'
 require_relative 'statistic_functions'
 
 class SalesAnalyst
-	attr_accessor :merchants_repository, :items_repository ,:invoices_repository, :customers_repository
+	attr_accessor :merchants_repository, :items_repository ,:invoices_repository, :customers_repository, :invoice_items_repository, :transactions_repository
 
 	include StatisticFunctions
 
-	def initialize(merchants_repository,items_repository,invoices_repository,customers_repository)
-		@merchants_repository, @items_repository,@invoices_repository,@customers_repository = merchants_repository,items_repository,invoices_repository,customers_repository
+	def initialize(merchants_repository,items_repository,invoices_repository,customers_repository,invoice_items_repository,transactions_repository)
+		@merchants_repository, @items_repository,@invoices_repository,@customers_repository,@invoice_items_repository,@transactions_repository = merchants_repository,items_repository,invoices_repository,customers_repository,invoice_items_repository,transactions_repository
 	end
 
 	def average_items_per_merchant
@@ -161,15 +161,31 @@ class SalesAnalyst
 
 	end
 
-def invoice_status(status)
+	def invoice_status(status)
 
-	invoices_with_status=@invoices_repository.all(attribute: :status).select{|invoice_status| invoice_status==status}.count
+		invoices_with_status=@invoices_repository.all(attribute: :status).select{|invoice_status| invoice_status==status}.count
 
-	result=(invoices_with_status/@invoices_repository.total_entities.to_f)*100
+		result=(invoices_with_status/@invoices_repository.total_entities.to_f)*100
 
-	result.round(2)
-	
-end
+		result.round(2)
+		
+	end
+
+	def invoice_paid_in_full?(id)
+		!(@transactions_repository.find_all_by_invoice_id(id).select{|i| i.result==:success}.empty?)
+
+		#binding.pry
+	end
+
+	def invoice_total(id)
+
+		@invoice_items_repository.find_all_by_invoice_id(id).inject(0) do |sum,i|
+
+			sum+i.quantity*i.unit_price
+			
+		end
 
 
+		
+	end
 end

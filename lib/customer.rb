@@ -18,11 +18,16 @@ def initialize(id:, first_name:, last_name:, created_at:Time.now,updated_at:Time
 	@id=id.to_i
 	@first_name=first_name
 	@last_name=last_name
-	@created_at=created_at 
-	@updated_at = updated_at
-
 	@total_entities=Hash.new(0)
-
+unless created_at.instance_of? (Time) || updated_at.instance_of?(Time)
+	@created_at= Time.parse(created_at)
+	@updated_at = Time.parse(updated_at)	
+	
+else
+	
+	@created_at=created_at
+	@updated_at=updated_at
+	end
 
 
 end
