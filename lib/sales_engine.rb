@@ -75,9 +75,10 @@ def self.analyst
 merchants
 items
 invoices
-merchants,items,invoices=merchants_repository,items_repository,invoices_repository
+customers
+merchants,items,invoices,customers=merchants_repository,items_repository,invoices_repository,customers
 #binding.pry
-SalesAnalyst.new(merchants,items,invoices)
+SalesAnalyst.new(merchants,items,invoices,customers)
 
 end
 

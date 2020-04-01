@@ -2,12 +2,12 @@ require 'pry'
 require_relative 'statistic_functions'
 
 class SalesAnalyst
-	attr_accessor :merchants_repository, :items_repository ,:invoices_repository
+	attr_accessor :merchants_repository, :items_repository ,:invoices_repository, :customers_repository
 
 	include StatisticFunctions
 
-	def initialize(merchants_repository,items_repository,invoices_repository)
-		@merchants_repository, @items_repository = merchants_repository,items_repository,invoices_repository
+	def initialize(merchants_repository,items_repository,invoices_repository,customers_repository)
+		@merchants_repository, @items_repository,@invoices_repository,@customers_repository = merchants_repository,items_repository,invoices_repository,customers_repository
 	end
 
 	def average_items_per_merchant
@@ -65,6 +65,7 @@ class SalesAnalyst
 
 
 	def golden_items
+		
 		average_item_price=average(values:@items_repository.all(attribute: :unit_price), number_of_values:@items_repository.total)
 		
 		standard_deviation_items_price=standard_deviation(set_of_values: @items_repository.all(attribute: :unit_price))
@@ -83,8 +84,92 @@ class SalesAnalyst
 
 	def average_invoices_per_merchant_standard_deviation 
 
-		standard_deviation(set_of_values: @merchants_repository.all_total_entities(:invoices))
+		result=standard_deviation(set_of_values: @merchants_repository.all_total_entities(:invoices))[:result]
+
+
 		
 	end
+
+	def top_merchants_by_invoice_count
+
+		container=standard_deviation(set_of_values: @merchants_repository.all_total_entities(:invoices))
+
+		average=container[:average]
+
+		standard_deviation=container[:result]
+
+		@merchants_repository.all.select do |merchant|
+				
+			merchant.total_entities[:invoices]-2*standard_deviation>average
+			
+		end
+		
+	end
+
+	def bottom_merchants_by_invoice_count
+
+		container=standard_deviation(set_of_values: @merchants_repository.all_total_entities(:invoices))
+
+		average=container[:average]
+
+		standard_deviation=container[:result]
+
+		compared1=average-2*standard_deviation
+		compared2=average-3*standard_deviation
+
+		range=compared2..compared1
+
+		@merchants_repository.all.select do |merchant|
+				
+			#merchant.total_entities[:invoices]-1*standard_deviation<average
+
+			range.include?(merchant.total_entities[:invoices])
+	
+		end
+
+
+	end
+
+	def top_days_by_invoice_count
+
+		day_of_week={1=>'Monday',2=>'Thuesday', 3=>'Wednesday', 4=>'Thursday', 5=>'Friday', 6=>'Saturday',0=>'Sunday'}
+		invoices_per_day_of_week={1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0,0=>0}
+		
+		
+		@invoices_repository.all.each do |i|
+
+			invoices_per_day_of_week[i.created_at.wday]+=1
+			#binding.pry
+		end
+		
+		container=standard_deviation(set_of_values: invoices_per_day_of_week.values)
+
+		average=container[:average]
+
+		standard_deviation=container[:result]
+
+		result=invoices_per_day_of_week.select do |day,invoices|
+				
+			invoices-standard_deviation>average
+			
+		end		
+
+		result.keys.map{|i|  day_of_week[i]}
+
+
+
+
+	end
+
+def invoice_status(status)
+
+	invoices_with_status=@invoices_repository.all(attribute: :status).select{|invoice_status| invoice_status==status}.count
+
+	result=(invoices_with_status/@invoices_repository.total_entities.to_f)*100
+
+	result.round(2)
+	
+end
+
 
 end

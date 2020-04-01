@@ -25,9 +25,6 @@ def standard_deviation(set_of_values:)
 	
 end
 
-def standard_deviation_evaluation
 
-
-end
 
 end
