@@ -100,12 +100,16 @@ end
 
 
 def self.analyst 
+
 merchants
 items
+
 invoices
 customers
+
 invoice_items
 transactions
+
 merchants,items,invoices,customers,invoice_items,transactions=merchants_repository,items_repository,invoices_repository,customers_repository,invoice_items_repository,transactions_repository
 #binding.pry
 SalesAnalyst.new(merchants,items,invoices,customers,invoice_items,transactions)

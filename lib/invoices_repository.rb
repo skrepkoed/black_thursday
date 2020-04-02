@@ -50,4 +50,10 @@ def find_all_by_status(status)
 	
 end
 
+def find_all_by_date(date)
+
+	@all.select { |invoice| invoice.created_at==date  }
+	
+end
+
 end

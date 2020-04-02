@@ -14,7 +14,7 @@ class<<self
 
 include CsvParser
 
-attr_accessor  :id, :invoice_id, :created_at, :updated_at, :result, :credit_card_expiration_date, :credit_card_number
+attr_accessor  :id, :invoice_id, :created_at, :updated_at, :result, :credit_card_expiration_date, :credit_card_number, :owner_model
 
 
 def initialize(id:,invoice_id:, credit_card_number:, credit_card_expiration_date:,result:, created_at:Time.now,updated_at:Time.now)
@@ -23,6 +23,7 @@ def initialize(id:,invoice_id:, credit_card_number:, credit_card_expiration_date
 	@credit_card_number=credit_card_number
 	@credit_card_expiration_date=credit_card_expiration_date
 	@result=result.to_sym
+	@owner_model={invoices:invoice_id.to_i}
 	unless created_at.instance_of? (Time) || updated_at.instance_of?(Time)
 	@created_at= Time.parse(created_at)
 	@updated_at = Time.parse(updated_at)	

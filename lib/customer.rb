@@ -18,7 +18,7 @@ def initialize(id:, first_name:, last_name:, created_at:Time.now,updated_at:Time
 	@id=id.to_i
 	@first_name=first_name
 	@last_name=last_name
-	@total_entities=Hash.new(0)
+	@total_entities=Hash.new{|h,k| h[k]=[]}
 unless created_at.instance_of? (Time) || updated_at.instance_of?(Time)
 	@created_at= Time.parse(created_at)
 	@updated_at = Time.parse(updated_at)	

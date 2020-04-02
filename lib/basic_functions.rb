@@ -16,7 +16,7 @@ def all( attribute:nil)
 end
 def all_total_entities(entity)
 	
-	@all.map { |e| e.total_entities[entity]  }
+	@all.map { |e| e.total_entities[entity].count }
 
 end
 
@@ -97,7 +97,7 @@ def create(attributes)
 		
 		container.each do |entity_name,i|
 
-		SalesEngine.send(entity_name).find_by_id(i).total_entities[owned_entity]+=1
+		SalesEngine.send(entity_name).find_by_id(i).total_entities[owned_entity]<<attributes[:id].to_i
 		end
 		new_entity=@included_class.new(attributes)
 			
@@ -128,7 +128,19 @@ def update(id, attributes)
 end
 
 def delete(id)
-	
+	del_entity=find_by_id(id)
+	owned_entity=(del_entity.class.to_s.downcase+'s').to_sym
+	if del_entity.respond_to?(:owner_model)
+		del_entity.owner_model.each do |k,v|
+#binding.pry
+			SalesEngine.send(k).find_by_id(v).total_entities[owned_entity].delete_if{|i| i==id}
+			
+		end
+		
+
+		
+	end
+
 	@all.delete_if{|entity| entity.id==id}
 end
 

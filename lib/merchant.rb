@@ -15,8 +15,9 @@ include CsvParser
 
 def initialize(id:,name:,created_at:Time.now,updated_at:Time.now)
 	@id, @name, @created_at, @updated_at = id.to_i, name ,created_at,updated_at
+#array=->{Array.new}
+	@total_entities=Hash.new{|h,k| h[k]=[]}
 
-	@total_entities=Hash.new(0)
 
 
 
